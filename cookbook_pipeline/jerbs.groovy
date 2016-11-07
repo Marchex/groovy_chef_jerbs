@@ -9,6 +9,14 @@ def configure_environment() {
     env.KITCHEN_EC2_SSH_KEY_PATH="/var/lib/jenkins/.ssh/tools-team.pem"
 }
 
-
+def checkout_scm() {
+    checkout scm
+    sh '''
+        gem list --local
+        gem install foodcritic
+        gem install bundler
+        bundle install --path /var/lib/jenkins/.chefdk/gem                
+    '''
+}
 
 return this;
