@@ -58,4 +58,27 @@ def cleanup() {
 //         subject: "hostclass_publicftp ${env.JOB_NAME} (${env.BUILD_NUMBER}) build successful",
 //         to: 'jcarter@marchex.com'
 }
+
+def all_the_jerbs() {
+    jerbs.configure_environment()
+    try {
+        stage ('Checkout') { jerbs.checkout_scm() }
+        stage ('Lint') { jerbs.lint() }
+        stage ('ChefSpec') { jerbs.chefspec() }
+        stage ('TestKitchen') { jerbs.kitchen() }
+        stage ('Cleanup') { jerbs.cleanup() }
+    }
+
+    catch (err) {
+        currentBuild.result = "FAILURE"
+        mail body: "${env.JOB_NAME} (${env.BUILD_NUMBER}) cookbook build error " +
+                   "is here: ${env.BUILD_URL}\nStarted by ${env.BUILD_CAUSE}" ,
+             from: 'tools-team@marchex.com',
+             replyTo: 'tools-team@marchex.com',
+             subject: "hostclass_publicftp ${env.JOB_NAME} (${env.BUILD_NUMBER}) build failed",
+             to: 'tools-team@marchex.com'
+        throw err
+    }
+}
+
 return this;
