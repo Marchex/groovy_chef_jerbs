@@ -48,4 +48,14 @@ def kitchen() {
         """
     //}
 }
+
+def cleanup() {
+   echo 'Cleanup'
+//   mail body: "${env.BUILD_URL} build successful.\n" +
+//               "Started by ${env.BUILD_CAUSE}",
+//         from: 'tools-team@marchex.com',
+//         replyTo: 'tools-team@marchex.com',
+//         subject: "hostclass_publicftp ${env.JOB_NAME} (${env.BUILD_NUMBER}) build successful",
+//         to: 'jcarter@marchex.com'
+}
 return this;
