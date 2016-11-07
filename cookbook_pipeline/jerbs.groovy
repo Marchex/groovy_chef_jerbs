@@ -31,4 +31,21 @@ def lint() {
     echo "RESULT: ${currentBuild.result}"
 }
 
+def chefspec() {
+    sh """
+        echo '--format RspecJunitFormatter' > .rspec
+        echo '--out result.xml' >> .rspec
+        rake chefspec
+    """
+
+    step([$class: 'JUnitResultArchiver', testResults: 'result.xml'])
+}
+
+def kitchen() {
+    //wrap([$class: 'AnsiColorSimpleBuildWrapper', colorMapName: "xterm"]) {
+        sh """
+            rake kitchen
+        """
+    //}
+}
 return this;
