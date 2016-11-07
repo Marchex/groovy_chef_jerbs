@@ -60,13 +60,13 @@ def cleanup() {
 }
 
 def all_the_jerbs() {
-    jerbs.configure_environment()
+    configure_environment()
     try {
-        stage ('Checkout') { jerbs.checkout_scm() }
-        stage ('Lint') { jerbs.lint() }
-        stage ('ChefSpec') { jerbs.chefspec() }
-        stage ('TestKitchen') { jerbs.kitchen() }
-        stage ('Cleanup') { jerbs.cleanup() }
+        stage ('Checkout') { checkout_scm() }
+        stage ('Lint') { lint() }
+        stage ('ChefSpec') { chefspec() }
+        stage ('TestKitchen') { kitchen() }
+        stage ('Cleanup') { cleanup() }
     }
 
     catch (err) {
