@@ -8,4 +8,8 @@ def printHello() {
   println "Hello, world!"
 }
 
+def printHelloToo() {
+  println "Hello, worldz!!!"
+}
+
 return this;
