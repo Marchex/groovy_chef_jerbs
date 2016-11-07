@@ -19,4 +19,16 @@ def checkout_scm() {
     '''
 }
 
+def lint() {
+    try {
+        sh """
+            rake lint
+        """
+    }
+    catch (Exception err) {
+        currentBuild.result = "UNSTABLE"
+    }
+    echo "RESULT: ${currentBuild.result}"
+}
+
 return this;
