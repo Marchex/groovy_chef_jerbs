@@ -44,7 +44,7 @@ def chefspec() {
 def kitchen() {
     //wrap([$class: 'AnsiColorSimpleBuildWrapper', colorMapName: "xterm"]) {
         sh """
-            kitchen test
+            kitchen test -c 8
         """
     //}
 }
