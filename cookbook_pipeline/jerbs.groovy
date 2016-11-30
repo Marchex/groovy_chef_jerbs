@@ -77,7 +77,7 @@ def all_the_jerbs() {
                    "is here: ${env.BUILD_URL}\nStarted by ${env.BUILD_CAUSE}" ,
              from: 'tools-team@marchex.com',
              replyTo: 'tools-team@marchex.com',
-             subject: "hostclass_publicftp ${env.JOB_NAME} (${env.BUILD_NUMBER}) build failed",
+             subject: "Jerbkins ${env.JOB_NAME} (${env.BUILD_NUMBER}) build failed",
              to: 'tools-team@marchex.com'
         throw err
     }
