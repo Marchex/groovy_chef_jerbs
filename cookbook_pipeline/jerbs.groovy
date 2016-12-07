@@ -44,9 +44,9 @@ def chefspec() {
 def kitchen() {
     //wrap([$class: 'AnsiColorSimpleBuildWrapper', colorMapName: "xterm"]) {
         sh """
-            kitchen destroy
+            bundle exec kitchen destroy
             rm -rf ./.kitchen/*.yml
-            kitchen test -c 8
+            bundle exec kitchen test -c 8
         """
     //}
 }
