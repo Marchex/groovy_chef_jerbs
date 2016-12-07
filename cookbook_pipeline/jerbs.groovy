@@ -78,7 +78,7 @@ def all_the_jerbs() {
              from: 'tools-team@marchex.com',
              replyTo: 'tools-team@marchex.com',
              subject: "Jerbkins ${env.JOB_NAME} (${env.BUILD_NUMBER}) build failed",
-             to: 'tools-team@marchex.com'
+             to: 'jcarter@marchex.com,tflint@marchex.com,cnandor@marchex.com'
         throw err
     }
 }
