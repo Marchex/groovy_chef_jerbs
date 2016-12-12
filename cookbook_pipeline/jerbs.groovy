@@ -42,23 +42,34 @@ def chefspec() {
 }
 
 def kitchen() {
-    //wrap([$class: 'AnsiColorSimpleBuildWrapper', colorMapName: "xterm"]) {
+    wrap([$class: 'AnsiColorSimpleBuildWrapper', colorMapName: "xterm"]) {
         sh """
             bundle exec kitchen destroy
             rm -rf ./.kitchen/*.yml
             bundle exec kitchen test -c 8
         """
-    //}
+    }
+}
+
+def deliverance() { 
+    wrap([$class: 'AnsiColorBuildWrapper', 'colorMapName': 'XTerm']) 
+    {
+        // do_delivery is in the hostclass_jenkins cookbook
+        sh """
+            /var/lib/jenkins/bin/do_delivery
+        """
+    } 
 }
 
 def cleanup() {
    echo 'Cleanup'
-//   mail body: "${env.BUILD_URL} build successful.\n" +
-//               "Started by ${env.BUILD_CAUSE}",
-//         from: 'tools-team@marchex.com',
-//         replyTo: 'tools-team@marchex.com',
-//         subject: "hostclass_publicftp ${env.JOB_NAME} (${env.BUILD_NUMBER}) build successful",
-//         to: 'jcarter@marchex.com'
+    // TODO: make this a slack channel notification
+    //   mail body: "${env.BUILD_URL} build successful.\n" +
+    //               "Started by ${env.BUILD_CAUSE}",
+    //         from: 'tools-team@marchex.com',
+    //         replyTo: 'tools-team@marchex.com',
+    //         subject: "hostclass_publicftp ${env.JOB_NAME} (${env.BUILD_NUMBER}) build successful",
+    //         to: 'jcarter@marchex.com'
 }
 
 def all_the_jerbs() {
@@ -68,6 +79,7 @@ def all_the_jerbs() {
         stage ('Lint') { lint() }
         stage ('ChefSpec') { chefspec() }
         stage ('TestKitchen') { kitchen() }
+        //stage ('Delivery Review') { deliverance() }
         stage ('Cleanup') { cleanup() }
     }
 
