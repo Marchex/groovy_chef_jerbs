@@ -79,7 +79,7 @@ def all_the_jerbs() {
         stage ('Lint') { lint() }
         stage ('ChefSpec') { chefspec() }
         stage ('TestKitchen') { kitchen() }
-        //stage ('Delivery Review') { deliverance() }
+        stage ('Delivery Review') { deliverance() }
         stage ('Cleanup') { cleanup() }
     }
 
