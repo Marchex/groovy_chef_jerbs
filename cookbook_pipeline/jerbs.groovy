@@ -22,7 +22,7 @@ def checkout_scm() {
 def lint() {
     try {
         sh """
-            bundle exec rake lint
+            rake lint
         """
     }
     catch (Exception err) {
@@ -35,7 +35,7 @@ def chefspec() {
     sh """
         echo '--format RspecJunitFormatter' > .rspec
         echo '--out result.xml' >> .rspec
-        bundle exec rake chefspec
+        rake chefspec
     """
 
     step([$class: 'JUnitResultArchiver', testResults: 'result.xml'])
