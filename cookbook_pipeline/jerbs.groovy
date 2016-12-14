@@ -15,7 +15,7 @@ def checkout_scm() {
         gem list --local
         gem install foodcritic
         gem install bundler
-        bundle install --path vendor/             
+        bundle install --path .vendor/             
     '''
 }
 
