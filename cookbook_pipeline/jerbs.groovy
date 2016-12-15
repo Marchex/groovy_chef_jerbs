@@ -7,6 +7,7 @@ def configure_environment() {
     env.GEM_PATH="./vendor/:/opt/chefdk/embedded/lib/ruby/gems/2.3.0"
     env.KITCHEN_YAML=".kitchen.ec2.yml"
     env.KITCHEN_EC2_SSH_KEY_PATH="/var/lib/jenkins/.ssh/tools-team.pem"
+    env.KITCHEN_INSTANCE_NAME="test-kitchen-${env.JOB_NAME}"
 }
 
 def checkout_scm() {
