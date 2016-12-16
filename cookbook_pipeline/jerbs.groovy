@@ -91,8 +91,9 @@ def all_the_jerbs() {
         stage ('ChefSpec') { chefspec() }
         stage ('TestKitchen') { kitchen() }
         stage ('Delivery Review') { deliverance() }
-        stage ('Cleanup') { cleanup() }
-        notifySlack('At your service', '#tools-alerts')
+        stage ('Cleanup') { cleanup() 
+                            notifySlack('At your service', '#tools-alerts')
+        }
     }
 
     catch (err) {
