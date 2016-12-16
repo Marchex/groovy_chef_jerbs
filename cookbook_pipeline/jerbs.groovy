@@ -1,15 +1,5 @@
 def version = '1.0'
 
-import groovy.json.JsonOutput
-def notifySlack(text, channel) {
-    def slackURL = 'https://hooks.slack.com/services/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'
-    def payload = JsonOutput.toJson([text      : text,
-                                     channel   : channel,
-                                     username  : "jenkins",
-                                     icon_emoji: ":jenkins_ci:"])
-    sh "curl -X POST --data-urlencode \'payload=${payload}\' ${slackURL}"
-}
-
 def configure_environment() {
     env.PATH="/opt/chefdk/bin:/var/lib/jenkins/.chefdk/gem/ruby/2.3.0/bin:/opt/chefdk/embedded/bin:${env.PATH}:/opt/chefdk/gitbin"
     env.GEM_ROOT="/opt/chefdk/embedded/lib/ruby/gems/2.3.0"
@@ -91,9 +81,7 @@ def all_the_jerbs() {
         stage ('ChefSpec') { chefspec() }
         stage ('TestKitchen') { kitchen() }
         stage ('Delivery Review') { deliverance() }
-        stage ('Cleanup') { cleanup() 
-                            notifySlack('At your service', '#tools-alerts')
-        }
+        stage ('Cleanup') { cleanup() }
     }
 
     catch (err) {
