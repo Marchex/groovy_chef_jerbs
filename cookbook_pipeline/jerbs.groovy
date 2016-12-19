@@ -27,7 +27,7 @@ def lint() {
         """
     }
     catch (Exception err) {
-        currentBuild.result = "UNSTABLE"
+        currentBuild.result = "FAILURE"
     }
     echo "RESULT: ${currentBuild.result}"
 }
