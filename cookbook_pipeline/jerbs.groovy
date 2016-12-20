@@ -21,14 +21,9 @@ def checkout_scm() {
 }
 
 def lint() {
-    try {
-        sh """
-            rake lint
-        """
-    }
-    catch (Exception err) {
-        currentBuild.result = "FAILURE"
-    }
+    sh """
+        rake lint
+    """
     echo "RESULT: ${currentBuild.result}"
 }
 
