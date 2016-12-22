@@ -37,7 +37,8 @@ def chefspec() {
     step([$class: 'JUnitResultArchiver', testResults: 'result.xml'])
 }
 
-def kitchen() {
+def kitchen(runbit = true) {
+    if (runbit == false) { return }
     wrap([$class: 'AnsiColorBuildWrapper', 'colorMapName': 'XTerm']) {
         sh """
             bundle exec kitchen destroy
@@ -47,7 +48,8 @@ def kitchen() {
     }
 }
 
-def deliverance() { 
+def deliverance(runbit = true) {
+    if (runbit == false) { return }
     wrap([$class: 'AnsiColorBuildWrapper', 'colorMapName': 'XTerm']) 
     {
         // do_delivery is in the hostclass_jenkins cookbook
@@ -69,16 +71,16 @@ def cleanup() {
 }
 
 def all_the_jerbs(
-      kitchen = true,
-      deliver = true
+      run_kitchen = true,
+      run_deliver = true
     ) {
     configure_environment()
     try {
         stage ('Checkout') { checkout_scm() }
         stage ('Lint') { lint() }
         stage ('ChefSpec') { chefspec() }
-        if (kitchen) { stage ('TestKitchen') { kitchen() }} 
-        if (deliver) { stage ('Delivery Review') { deliverance() }}
+        stage ('TestKitchen') { kitchen(run_kitchen) }
+        stage ('Delivery Review') { deliverance(run_deliver) }
         stage ('Cleanup') { cleanup() }
     }
 
