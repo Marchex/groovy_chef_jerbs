@@ -37,7 +37,7 @@ def chefspec() {
     step([$class: 'JUnitResultArchiver', testResults: 'result.xml'])
 }
 
-def kitchen(boolean runbit = true) {
+def kitchen(boolean runbit) {
     if (runbit == false) { 
         echo "INSIDE THE RUNBIT"
         return 
@@ -52,7 +52,7 @@ def kitchen(boolean runbit = true) {
     }
 }
 
-def deliverance(boolean runbit = true) {
+def deliverance(boolean runbit) {
     if (runbit == false) { return }
     wrap([$class: 'AnsiColorBuildWrapper', 'colorMapName': 'XTerm']) 
     {
@@ -74,17 +74,16 @@ def cleanup() {
     //         to: 'jcarter@marchex.com'
 }
 
-def all_the_jerbs(
-      boolean run_kitchen = true,
-      boolean run_deliver = true
-    ) {
+def all_the_jerbs(Map args) {
+    run_kitchen = args.run_kitchen ?: true
+    run_banjo = args.run_delivery ?: true
     configure_environment()
     try {
         stage ('Checkout') { checkout_scm() }
         stage ('Lint') { lint() }
         stage ('ChefSpec') { chefspec() }
         stage ('TestKitchen') { kitchen(run_kitchen) }
-        stage ('Delivery Review') { deliverance(run_deliver) }
+        stage ('Delivery Review') { deliverance(run_banjo) }
         stage ('Cleanup') { cleanup() }
     }
 
