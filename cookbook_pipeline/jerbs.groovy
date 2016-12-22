@@ -68,14 +68,17 @@ def cleanup() {
     //         to: 'jcarter@marchex.com'
 }
 
-def all_the_jerbs() {
+def all_the_jerbs(
+      kitchen = true,
+      deliver = true
+    ) {
     configure_environment()
     try {
         stage ('Checkout') { checkout_scm() }
         stage ('Lint') { lint() }
         stage ('ChefSpec') { chefspec() }
-        stage ('TestKitchen') { kitchen() }
-        stage ('Delivery Review') { deliverance() }
+        if (kitchen) { stage ('TestKitchen') { kitchen() }} 
+        if (deliver) { stage ('Delivery Review') { deliverance() }}
         stage ('Cleanup') { cleanup() }
     }
 
