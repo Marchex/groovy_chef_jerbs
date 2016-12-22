@@ -75,8 +75,8 @@ def cleanup() {
 }
 
 def all_the_jerbs(Map args) {
-    run_kitchen = args.run_kitchen ?: true
-    run_banjo = args.run_delivery ?: true
+    run_kitchen = (args.run_kitchen != null) ? args.run_kitchen : true
+    run_banjo = (args.run_delivery != null) ? args.run_delivery : true
     configure_environment()
     try {
         stage ('Checkout') { checkout_scm() }
