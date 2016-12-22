@@ -37,7 +37,7 @@ def chefspec() {
     step([$class: 'JUnitResultArchiver', testResults: 'result.xml'])
 }
 
-def kitchen(runbit = true) {
+def kitchen(boolean runbit = true) {
     if (runbit == false) { 
         echo "INSIDE THE RUNBIT"
         return 
@@ -52,7 +52,7 @@ def kitchen(runbit = true) {
     }
 }
 
-def deliverance(runbit = true) {
+def deliverance(boolean runbit = true) {
     if (runbit == false) { return }
     wrap([$class: 'AnsiColorBuildWrapper', 'colorMapName': 'XTerm']) 
     {
@@ -75,8 +75,8 @@ def cleanup() {
 }
 
 def all_the_jerbs(
-      run_kitchen = true,
-      run_deliver = true
+      boolean run_kitchen = true,
+      boolean run_deliver = true
     ) {
     configure_environment()
     try {
