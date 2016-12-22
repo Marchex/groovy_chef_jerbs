@@ -38,11 +38,7 @@ def chefspec() {
 }
 
 def kitchen(boolean runbit) {
-    if (runbit == false) { 
-        echo "INSIDE THE RUNBIT"
-        return 
-        
-    }
+    if (runbit == false) { return }
     wrap([$class: 'AnsiColorBuildWrapper', 'colorMapName': 'XTerm']) {
         sh """
             bundle exec kitchen destroy
