@@ -95,4 +95,9 @@ def all_the_jerbs(Map args) {
     }
 }
 
+# When all_the_jerbs is called with no args, run with kitchen and delivery by default
+def all_the_jerbs() {
+  all_the_jerbs(run_kitchen: true, run_delivery: true)
+}
+
 return this;
