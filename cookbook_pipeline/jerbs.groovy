@@ -90,7 +90,7 @@ def all_the_jerbs(Map args) {
              from: 'tools-team@marchex.com',
              replyTo: 'tools-team@marchex.com',
              subject: "Jerbkins ${env.JOB_NAME} (${env.BUILD_NUMBER}) build failed",
-             to: 'jcarter@marchex.com'
+             to: 'jcarter@marchex.com,tflint@marchexcom,${env.CHANGE_AUTHOR}@marchex.com'
         throw err
     }
 }
