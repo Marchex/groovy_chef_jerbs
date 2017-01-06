@@ -16,7 +16,7 @@ def checkout_scm() {
         gem list --local
         gem install foodcritic
         gem install bundler
-        bundle install --path .vendor/             
+        bundle install --path .vendor/
     '''
 }
 
@@ -40,23 +40,33 @@ def chefspec() {
 def kitchen(boolean runbit) {
     if (runbit == false) { return }
     wrap([$class: 'AnsiColorBuildWrapper', 'colorMapName': 'XTerm']) {
+        # all kitchen commands run in parallel except verify, because
+        # inspec hates parallel verifies.  it's a bug.  but this is
+        # better anyway, because it groups tests together at the end,
+        # and it only destroys *any* of the VMs if *all* of them succeed,
+        # which can make debugging easier.
+
+        # if the initial destroy fails, we want to ignore it and continue,
+        # and we remove previous ymls in case they conflict
         sh """
-            bundle exec kitchen destroy
+            bundle exec kitchen destroy -c || true
             rm -rf ./.kitchen/*.yml
-            bundle exec kitchen test -c 8
+            bundle exec kitchen converge -c
+            bundle exec kitchen verify
+            bundle exec kitchen destroy -c
         """
     }
 }
 
 def deliverance(boolean runbit) {
     if (runbit == false) { return }
-    wrap([$class: 'AnsiColorBuildWrapper', 'colorMapName': 'XTerm']) 
+    wrap([$class: 'AnsiColorBuildWrapper', 'colorMapName': 'XTerm'])
     {
         // do_delivery is in the hostclass_jenkins cookbook
         sh """
             /var/lib/jenkins/bin/do_delivery
         """
-    } 
+    }
 }
 
 def cleanup() {
