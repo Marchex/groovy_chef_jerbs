@@ -84,6 +84,7 @@ def all_the_jerbs(Map args) {
     run_kitchen = (args.run_kitchen != null) ? args.run_kitchen : true
     run_banjo = (args.run_delivery != null) ? args.run_delivery : true
     configure_environment()
+
     try {
         stage ('Checkout') { checkout_scm() }
         stage ('Lint') { lint() }
@@ -94,7 +95,7 @@ def all_the_jerbs(Map args) {
     }
 
     catch (err) {
-        currentBuild.result = "FAILURE"
+        currentBuild.result = 'FAILURE'
         mail body: "${env.JOB_NAME} (${env.BUILD_NUMBER}) cookbook build error " +
                    "is here: ${env.BUILD_URL}\nStarted by ${env.BUILD_CAUSE}" ,
              from: 'tools-team@marchex.com',
@@ -102,6 +103,12 @@ def all_the_jerbs(Map args) {
              subject: "Jerbkins ${env.JOB_NAME} (${env.BUILD_NUMBER}) build failed",
              to: 'jcarter@marchex.com,tflint@marchexcom,${env.CHANGE_AUTHOR}@marchex.com'
         throw err
+    }
+
+    // null == pending for GitHub status
+    // https://github.com/jenkinsci/github-branch-source-plugin/blob/1dc7ac4306e14dc9af791cb94ff8da96c98dbc07/src/main/java/org/jenkinsci/plugins/github_branch_source/GitHubBuildStatusNotification.java#L104
+    if (currentBuild.result == null) {
+        currentBuild.result = 'SUCCESS'
     }
 }
 
