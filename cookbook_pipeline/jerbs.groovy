@@ -48,12 +48,15 @@ def kitchen(boolean runbit) {
 
         // if the initial destroy fails, we want to ignore it and continue,
         // and we remove previous ymls in case they conflict
+        
+        // adding -c 8 because of AWS's API rate limit, which is subtle
+        // and quick to anger
         sh """
-            bundle exec kitchen destroy -c || true
+            bundle exec kitchen destroy -c 8 || true
             rm -rf ./.kitchen/*.yml
-            bundle exec kitchen converge -c
+            bundle exec kitchen converge -c 8
             bundle exec kitchen verify
-            bundle exec kitchen destroy -c
+            bundle exec kitchen destroy -c 8
         """
     }
 }
