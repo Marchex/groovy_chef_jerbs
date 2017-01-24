@@ -46,6 +46,11 @@ def kitchen(boolean runbit) {
         // and it only destroys *any* of the VMs if *all* of them succeed,
         // which can make debugging easier.
 
+        // worse, we have a user-data script that runs in EC2 on create, and it
+        // doesn't block between create/converge, and it runs apt, which
+        // breaks converge (which also runs apt).  so, we create, then sleep,
+        // then converge.
+
         // if the initial destroy fails, we want to ignore it and continue,
         // and we remove previous ymls in case they conflict
         
@@ -54,6 +59,8 @@ def kitchen(boolean runbit) {
         sh """
             bundle exec kitchen destroy -c 8 || true
             rm -rf ./.kitchen/*.yml
+            bundle exec kitchen create -c 8
+            sleep 30
             bundle exec kitchen converge -c 8
             bundle exec kitchen verify
             bundle exec kitchen destroy -c 8
