@@ -8,8 +8,6 @@ def configure_environment() {
     env.KITCHEN_YAML=".kitchen.ec2.yml"
     env.KITCHEN_EC2_SSH_KEY_PATH="/var/lib/jenkins/.ssh/tools-team.pem"
     env.KITCHEN_INSTANCE_NAME="test-kitchen-${env.JOB_NAME}"
-    env.AWS_ACCESS_KEY_ID="AKIAI4S27KF2TAWP4DBA"
-    env.AWS_SECRET_ACCESS_KEY="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"
 }
 
 def checkout_scm() {
