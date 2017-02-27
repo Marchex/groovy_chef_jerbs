@@ -21,6 +21,8 @@ def checkout_scm() {
 }
 
 def bumped_version() {
+    if (env.BRANCH_NAME == 'master') { return }
+
     // bumped_version is in the hostclass_jenkins cookbook
     sh """
         /var/lib/jenkins/bin/bumped_version
