@@ -22,11 +22,17 @@ def checkout_scm() {
     '''
 }
 
+def bumped_version() {
+    // bumped_version is in the hostclass_jenkins cookbook
+    sh """
+        /var/lib/jenkins/bin/bumped_version
+    """
+}
+
 def lint() {
     sh """
         rake lint
     """
-    echo "RESULT: ${currentBuild.result}"
 }
 
 def chefspec() {
@@ -99,6 +105,7 @@ def all_the_jerbs(Map args) {
 
     try {
         stage ('Checkout') { checkout_scm() }
+        stage ('Version Bump Check') { bumped_version() }
         stage ('Lint') { lint() }
         stage ('ChefSpec') { chefspec() }
         stage ('TestKitchen') { kitchen(run_kitchen) }
