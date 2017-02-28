@@ -78,13 +78,12 @@ def kitchen(boolean runbit) {
 
 def deliverance(boolean runbit) {
     if (runbit == false) { return }
-    wrap([$class: 'AnsiColorBuildWrapper', 'colorMapName': 'XTerm'])
-    {
-        // do_delivery is in the hostclass_jenkins cookbook
-        sh """
-            /var/lib/jenkins/bin/do_delivery
-        """
-    }
+    // publish the cookbook to supermarket and chef, but only if this is
+    // the merge to master
+    if (env.BRANCH_NAME != 'master') { return }
+    sh """
+        /var/lib/jenkins/bin/publish_cookbook
+    """
 }
 
 def cleanup() {
