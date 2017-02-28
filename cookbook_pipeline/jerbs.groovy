@@ -12,6 +12,7 @@ def configure_environment() {
 
 def checkout_scm() {
     checkout scm
+    bumped_version()
     sh '''
         gem list --local
         gem install foodcritic
@@ -22,6 +23,7 @@ def checkout_scm() {
 
 def bumped_version() {
     if (env.BRANCH_NAME == 'master') { return }
+    echo 'Checking that version has been bumped'
 
     // bumped_version is in the hostclass_jenkins cookbook
     sh """
@@ -104,7 +106,6 @@ def all_the_jerbs(Map args) {
 
     try {
         stage ('Checkout') { checkout_scm() }
-        stage ('Version Bump Check') { bumped_version() }
         stage ('Lint') { lint() }
         stage ('ChefSpec') { chefspec() }
         stage ('TestKitchen') { kitchen(run_kitchen) }
