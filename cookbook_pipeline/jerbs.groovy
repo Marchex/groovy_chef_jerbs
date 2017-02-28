@@ -109,7 +109,7 @@ def all_the_jerbs(Map args) {
         stage ('Publish') { deliverance(run_banjo) }
         stage ('Lint') { lint() }
         stage ('ChefSpec') { chefspec() }
-        stage ('TestKitchen') { kitchen(run_kitchen) }
+//        stage ('TestKitchen') { kitchen(run_kitchen) }
         stage ('Cleanup') { cleanup() }
     }
 
