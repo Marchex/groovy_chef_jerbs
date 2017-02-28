@@ -82,7 +82,7 @@ def deliverance(boolean runbit) {
     if (runbit == false) { return }
     // publish the cookbook to supermarket and chef, but only if this is
     // the merge to master
-    if (env.BRANCH_NAME != 'master') { return }
+//    if (env.BRANCH_NAME != 'master') { return }
     sh """
         /var/lib/jenkins/bin/publish_cookbook
     """
@@ -106,10 +106,10 @@ def all_the_jerbs(Map args) {
 
     try {
         stage ('Checkout') { checkout_scm() }
+        stage ('Publish') { deliverance(run_banjo) }
         stage ('Lint') { lint() }
         stage ('ChefSpec') { chefspec() }
         stage ('TestKitchen') { kitchen(run_kitchen) }
-        stage ('Delivery Review') { deliverance(run_banjo) }
         stage ('Cleanup') { cleanup() }
     }
 
