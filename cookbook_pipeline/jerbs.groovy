@@ -12,6 +12,7 @@ def configure_environment() {
 
 def checkout_scm() {
     checkout scm
+    bumped_version()
     sh '''
         gem list --local
         gem install foodcritic
@@ -22,6 +23,7 @@ def checkout_scm() {
 
 def bumped_version() {
     if (env.BRANCH_NAME == 'master') { return }
+    echo 'Checking that version has been bumped'
 
     // bumped_version is in the hostclass_jenkins cookbook
     sh """
@@ -76,15 +78,14 @@ def kitchen(boolean runbit) {
     }
 }
 
-def deliverance(boolean runbit) {
+def publish(boolean runbit) {
     if (runbit == false) { return }
-    wrap([$class: 'AnsiColorBuildWrapper', 'colorMapName': 'XTerm'])
-    {
-        // do_delivery is in the hostclass_jenkins cookbook
-        sh """
-            /var/lib/jenkins/bin/do_delivery
-        """
-    }
+    // publish the cookbook to supermarket and chef, but only if this is
+    // the merge to master
+    if (env.BRANCH_NAME != 'master') { return }
+    sh """
+        /var/lib/jenkins/bin/publish_cookbook
+    """
 }
 
 def cleanup() {
@@ -105,11 +106,10 @@ def all_the_jerbs(Map args) {
 
     try {
         stage ('Checkout') { checkout_scm() }
-        stage ('Version Bump Check') { bumped_version() }
         stage ('Lint') { lint() }
         stage ('ChefSpec') { chefspec() }
         stage ('TestKitchen') { kitchen(run_kitchen) }
-        stage ('Delivery Review') { deliverance(run_banjo) }
+        stage ('Publish') { publish(run_banjo) }
         stage ('Cleanup') { cleanup() }
     }
 
