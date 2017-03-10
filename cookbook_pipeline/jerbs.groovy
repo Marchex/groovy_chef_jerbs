@@ -11,6 +11,7 @@ def configure_environment() {
 }
 
 def checkout_scm() {
+    sh '/var/lib/jenkins/bin/rm_lockfiles'
     checkout scm
     bumped_version()
     sh '''
@@ -26,15 +27,11 @@ def bumped_version() {
     echo 'Checking that version has been bumped'
 
     // bumped_version is in the hostclass_jenkins cookbook
-    sh """
-        /var/lib/jenkins/bin/bumped_version
-    """
+    sh '/var/lib/jenkins/bin/bumped_version'
 }
 
 def lint() {
-    sh """
-        rake lint
-    """
+    sh 'rake lint'
 }
 
 def chefspec() {
@@ -66,7 +63,7 @@ def kitchen(boolean runbit) {
         
         // adding -c 8 because of AWS's API rate limit, which is subtle
         // and quick to anger
-        sh """
+        sh '''
             bundle exec kitchen destroy -c 8 || true
             rm -rf ./.kitchen/*.yml
             bundle exec kitchen create -c 8
@@ -74,7 +71,7 @@ def kitchen(boolean runbit) {
             bundle exec kitchen converge -c 8
             bundle exec kitchen verify
             bundle exec kitchen destroy -c 8
-        """
+        '''
     }
 }
 
@@ -83,9 +80,7 @@ def publish(boolean runbit) {
     // publish the cookbook to supermarket and chef, but only if this is
     // the merge to master
     if (env.BRANCH_NAME != 'master') { return }
-    sh """
-        /var/lib/jenkins/bin/publish_cookbook
-    """
+    sh '/var/lib/jenkins/bin/publish_cookbook'
 }
 
 def cleanup() {
