@@ -67,7 +67,7 @@ def kitchen(boolean runbit) {
             bundle exec kitchen destroy -c 8 || true
             rm -rf ./.kitchen/*.yml
             bundle exec kitchen create -c 8
-            sleep 30
+            sleep 120
             bundle exec kitchen converge -c 8
             bundle exec kitchen verify
             bundle exec kitchen destroy -c 8
