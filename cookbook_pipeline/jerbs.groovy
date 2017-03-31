@@ -31,7 +31,11 @@ def bumped_version() {
 }
 
 def lint() {
-    sh 'rake lint'
+    sh """
+        echo '~FC066' > .foodcritic
+        echo '~FC067' >> .foodcritic
+        rake lint
+    """
 }
 
 def chefspec() {
