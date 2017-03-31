@@ -32,8 +32,8 @@ def bumped_version() {
 
 def lint() {
     sh """
-        echo '~FC066' > .rspec
-        echo '~FC067' >> .rspec
+        echo '~FC066' > .foodcritic
+        echo '~FC067' >> .foodcritic
         rake lint
     """
 }
