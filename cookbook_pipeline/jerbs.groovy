@@ -14,12 +14,12 @@ def checkout_scm() {
     sh '/var/lib/jenkins/bin/rm_lockfiles'
     checkout scm
     bumped_version()
-    sh '''
+    sh """
         gem list --local
         gem install foodcritic
         gem install bundler
         bundle install --path .vendor/
-    '''
+    """
 }
 
 def bumped_version() {
@@ -93,7 +93,11 @@ def cleanup() {
 }
 
 def all_the_jerbs(Map args) {
-    run_kitchen = (args.run_kitchen != null) ? args.run_kitchen : true
+    run_kitchen = env.CHANGE_TITLE =~ /\bno_kitchen\b/
+            ? false
+            : (args.run_kitchen != null)
+                ? args.run_kitchen
+                : true
     run_banjo = (args.run_delivery != null) ? args.run_delivery : true
     configure_environment()
 
