@@ -62,11 +62,11 @@ def kitchen(boolean runbit) {
         // breaks converge (which also runs apt).  so, we create, then sleep,
         // then converge.
 
-        // if the initial destroy fails, we want to ignore it and continue,
-        // and we remove previous ymls in case they conflict
-        
         // adding -c 8 because of AWS's API rate limit, which is subtle
         // and quick to anger
+
+        // if the initial destroy fails, we want to ignore it and continue,
+        // and we remove previous ymls in case they conflict
         sh '''
             bundle exec kitchen destroy -c 8 || true
             rm -rf ./.kitchen/*.yml
@@ -88,14 +88,8 @@ def publish(boolean runbit) {
 }
 
 def cleanup() {
-   echo 'Cleanup'
-    // TODO: make this a slack channel notification
-    //   mail body: "${env.BUILD_URL} build successful.\n" +
-    //               "Started by ${env.BUILD_CAUSE}",
-    //         from: 'tools-team@marchex.com',
-    //         replyTo: 'tools-team@marchex.com',
-    //         subject: "hostclass_publicftp ${env.JOB_NAME} (${env.BUILD_NUMBER}) build successful",
-    //         to: 'jcarter@marchex.com'
+    echo 'Cleanup'
+    // TODO: add a slack channel notification?
 }
 
 def all_the_jerbs(Map args) {
@@ -132,7 +126,7 @@ def all_the_jerbs(Map args) {
 
 // When all_the_jerbs is called with no args, run with kitchen and delivery by default
 def all_the_jerbs() {
-  all_the_jerbs(run_kitchen: true, run_delivery: true)
+    all_the_jerbs(run_kitchen: true, run_delivery: true)
 }
 
 return this;
