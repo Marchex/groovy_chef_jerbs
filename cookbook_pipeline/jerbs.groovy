@@ -34,6 +34,8 @@ def lint() {
     sh """
         echo '~FC066' > .foodcritic
         echo '~FC067' >> .foodcritic
+        echo '~FC069' >> .foodcritic
+        echo '~FC071' >> .foodcritic
         rake lint
     """
 }
