@@ -14,6 +14,7 @@ def checkout_scm() {
     sh '/var/lib/jenkins/bin/rm_lockfiles'
     checkout scm
     bumped_version()
+    tag_cookbook()
     sh """
         gem list --local
         gem install foodcritic
@@ -28,6 +29,17 @@ def bumped_version() {
 
     // bumped_version is in the hostclass_jenkins cookbook
     sh '/var/lib/jenkins/bin/bumped_version'
+}
+
+def tag_cookbook() {
+    if (env.BRANCH_NAME != 'master') { return }
+    echo 'Tagging cookbook'
+    // note that we call this early in the run, because if someone else tagged
+    // we want to fail early, and because since it's already been merged to master,
+    // there's no reason to *not* do it early
+
+    // tag_cookbook is in the hostclass_jenkins cookbook
+    sh '/var/lib/jenkins/bin/tag_cookbook'
 }
 
 def lint() {
@@ -81,8 +93,7 @@ def kitchen(boolean runbit) {
     }
 }
 
-def publish(boolean runbit) {
-    if (runbit == false) { return }
+def publish() {
     // publish the cookbook to supermarket and chef, but only if this is
     // the merge to master
     if (env.BRANCH_NAME != 'master') { return }
@@ -100,7 +111,6 @@ def all_the_jerbs(Map args) {
             : (args.run_kitchen != null)
                 ? args.run_kitchen
                 : true
-    run_banjo = (args.run_delivery != null) ? args.run_delivery : true
     configure_environment()
 
     try {
@@ -108,7 +118,7 @@ def all_the_jerbs(Map args) {
         stage ('Lint') { lint() }
         stage ('ChefSpec') { chefspec() }
         stage ('TestKitchen') { kitchen(run_kitchen) }
-        stage ('Publish') { publish(run_banjo) }
+        stage ('Publish') { publish() }
         stage ('Cleanup') { cleanup() }
     }
 
@@ -132,7 +142,7 @@ def all_the_jerbs(Map args) {
 
 // When all_the_jerbs is called with no args, run with kitchen and delivery by default
 def all_the_jerbs() {
-    all_the_jerbs(run_kitchen: true, run_delivery: true)
+    all_the_jerbs(run_kitchen: true)
 }
 
 return this;
