@@ -48,6 +48,7 @@ def lint() {
         echo '~FC067' >> .foodcritic
         echo '~FC069' >> .foodcritic
         echo '~FC071' >> .foodcritic
+        echo '~FC078' >> .foodcritic
         rake lint
     """
 }
